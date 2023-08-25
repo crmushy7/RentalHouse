@@ -11,7 +11,7 @@ const Login = () => {
   return (
     <>
       <div
-        className="flex flex-col h-screen border border-black justify-center items-center"
+        className="flex flex-col h-full  justify-center items-center"
         style={{}}
       >
         <div className="flex flex-row justify-center items-center h-auto w-auto   bg-white rounded-full ">
@@ -25,7 +25,7 @@ const Login = () => {
           />
         </div>
         <div
-          className="flex flex-col items-start h-auto w-3/6  bg-white rounded-lg shadow-2xl"
+          className="flex flex-col items-start justify-around h-80 w-auto  bg-white rounded-lg shadow-2xl"
           style={{ marginTop: "2%", marginBottom: "2" }}
         >
           <span className="flex underline  text-blue-600 justify-center items-center w-full font-bold">
@@ -50,7 +50,7 @@ const Login = () => {
               linkto={"/"}
             />
           </div>
-          <CustomButton title="Login" navigateTo="/Tabcreator" background="green" />
+          <CustomButton title="Login" navigateTo="/Homepage" background="" />
         </div>
       </div>
     </>

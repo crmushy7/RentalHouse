@@ -1,11 +1,14 @@
 import { GraphQLClient } from "graphql-request";
 
 const requestHeaders = {
-  authorizanion: "Bearer MY_TOKEN",
+  authorization: "Bearer Token",
 };
+
 const graphqlRequestClient = new GraphQLClient(
-  process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT as string,{
-    headers:requestHeaders,
+  "http://192.168.150.152:3000/graphql" as string,
+  {
+    headers: requestHeaders,
   }
 );
+
 export default graphqlRequestClient;

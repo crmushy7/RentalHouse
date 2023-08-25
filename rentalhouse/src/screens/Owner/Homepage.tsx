@@ -13,6 +13,9 @@ import {
 } from "@mantine/core";
 import AddHouse from "./AddHouse";
 import Aboutus from "../../Aboutus";
+import AllHouses from "../mainscreens/AllHouses";
+import Myfavorites from "../mainscreens/Myfavorites";
+import Myhouses from "./Myhouses";
 
 export default function Homepage() {
   const theme = useMantineTheme();
@@ -44,7 +47,8 @@ export default function Homepage() {
               <Tabs.Tab value="second">MY HOUSES</Tabs.Tab>
               <Tabs.Tab value="third">ADD HOUSES</Tabs.Tab>
               <Tabs.Tab value="four">ALL HOUSES</Tabs.Tab>
-              {/* <Tabs.Tab value="second">Second tab</Tabs.Tab> */}
+              <Tabs.Tab value="six">FAVOURITE HOUSES</Tabs.Tab>
+              <Tabs.Tab value="seven">PAID HOUSES</Tabs.Tab>
               <Tabs.Tab value="five"> ABOUT US</Tabs.Tab>
             </Tabs.List>
           </Tabs>
@@ -66,7 +70,12 @@ export default function Homepage() {
       header={
         <Header height={{ base: 50, md: 70 }} p="md">
           <div
-            style={{ display: "flex", alignItems: "center", height: "100%" }}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+            }}
           >
             <MediaQuery largerThan="sm" styles={{ display: "none" }}>
               <Burger
@@ -77,8 +86,16 @@ export default function Homepage() {
                 mr="xl"
               />
             </MediaQuery>
-
-            <Text>Application header</Text>
+            {/* TOPBAR */}
+            <Tabs value={activeTab} onTabChange={setActiveTab}>
+              <Tabs.Panel value="first">First panel</Tabs.Panel>
+              <Tabs.Panel value="second">Second panel</Tabs.Panel>
+              <Tabs.Panel value="third">ADD HOUSES</Tabs.Panel>
+              <Tabs.Panel value="four">ALL HOUSES</Tabs.Panel>
+              <Tabs.Panel value="six">FAVORITE HOUSES</Tabs.Panel>
+              <Tabs.Panel value="seven">PAID HOUSES</Tabs.Panel>
+              <Tabs.Panel value="five">About us</Tabs.Panel>
+            </Tabs>
           </div>
         </Header>
       }
@@ -86,10 +103,24 @@ export default function Homepage() {
       {/* main div-centered */}
       <Tabs value={activeTab} onTabChange={setActiveTab}>
         <Tabs.Panel value="first">First panel</Tabs.Panel>
-        <Tabs.Panel value="second">Second panel</Tabs.Panel>
-        <Tabs.Panel value="third"><AddHouse/></Tabs.Panel>
-        <Tabs.Panel value="four">four panel</Tabs.Panel>
-        <Tabs.Panel value="five"><Aboutus/></Tabs.Panel>
+        <Tabs.Panel value="second">
+          <Myhouses />
+        </Tabs.Panel>
+        <Tabs.Panel value="third">
+          <AddHouse />
+        </Tabs.Panel>
+        <Tabs.Panel value="four">
+          <AllHouses />
+        </Tabs.Panel>
+        <Tabs.Panel value="six">
+          <Myfavorites />
+        </Tabs.Panel>
+        <Tabs.Panel value="seven">
+          Paid houses
+        </Tabs.Panel>
+        <Tabs.Panel value="five">
+          <Aboutus />
+        </Tabs.Panel>
       </Tabs>
     </AppShell>
   );

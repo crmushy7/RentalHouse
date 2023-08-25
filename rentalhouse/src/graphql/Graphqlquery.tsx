@@ -1,46 +1,50 @@
 import { gql } from "graphql-request";
-import React, { FC } from "react";
-import { useQuery } from "react-query";
-import { users } from './globalType/Globaltype';
-import { GraphQLResponse } from "../../node_modules/graphql-request/src/types";
+import { FC } from "react";
 import graphqlRequestClient from "../clients/GraphqlRequestClients";
+import { useQuery } from "@tanstack/react-query";
+import { User } from "./globalType/user";
 
-const GET_ALL_USERS_QUERY = gql`
-  query GetAllUsers {
-    user {
-      username
+const getUsers = gql`
+  query GetUsers {
+    users {
       firstName
       middleName
-      lastName
-      phoneNumber
+      lastname
       accountType
+      phoneNumber
+      username
     }
   }
 `;
 
-const GqlRequestQuery: FC<users> = () => {
-  const { isLoading, error, data } = useQuery<GraphQLResponse, Error, users[]>(
-    'users',
-    async ()=>{
-        return graphqlRequestClient.request(GET_ALL_USERS_QUERY);
-    },
-    {
-        select: (response)=>response.users,
+const GqlrequestQuery: FC = () => {
+  const { isLoading, error, data } = useQuery<{ users: User[] }, Error>(
+    ["users"],
+    async () => {
+      const response = await graphqlRequestClient.request<{ users: User[] }>(
+        getUsers
+      );
+      return response;
     }
   );
-  if(isLoading)return<p>Loading...</p>;
-  if(error)return<p>{error.message}</p>
+
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>{error.message}</p>;
+
   return (
-    <> {data?.map((users,index)=>{
-         return (
-           <div key={index}>
-             <h1>{users?.lastname}</h1>
-           </div>
-         );
-    }
-       )}</>
-   
-  )
+    <ul>
+      {data.users.map((user, index) => (
+        <li key={index}>
+          <p>
+            Name: {user.firstName} {user.middleName} {user.lastname}
+          </p>
+          <p>Account Type: {user.accountType}</p>
+          <p>Phone Number: {user.phoneNumber}</p>
+          <p>Username: {user.username}</p>
+        </li>
+      ))}
+    </ul>
+  );
 };
 
-export default GqlRequestQuery;
+export default GqlrequestQuery;

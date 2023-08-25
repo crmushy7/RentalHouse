@@ -7,9 +7,9 @@ const Custominput:FC<Custominputprops> = ({labeled,inputType,placeholder}) => {
       <span
         style={{
           marginLeft: "5%",
-          marginTop:"5%",
-          color:"blue",
-          fontWeight:"bold"
+          marginTop: "5%",
+          color: "#AFEEEE",
+          fontWeight: "bold",
         }}
       >
         {labeled}
@@ -19,6 +19,8 @@ const Custominput:FC<Custominputprops> = ({labeled,inputType,placeholder}) => {
           backgroundColor: "whitesmoke",
           width: "90%",
           marginLeft: "5%",
+          padding: "2%",
+          borderRadius: "20px",
         }}
         placeholder={placeholder}
         type={inputType}

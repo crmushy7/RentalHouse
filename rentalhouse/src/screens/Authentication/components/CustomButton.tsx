@@ -4,13 +4,21 @@ import { useNavigate } from 'react-router'
 const CustomButton: FC<CustomButtonprop> = ({title,navigateTo,background}) => {
   const navigate=useNavigate();
   return (
-    <div className='flex justify-center items-center w-full animate-pulse'>
-    <button className='rounded-full' style={{
-        backgroundColor:background,
-        padding:"1%",
-        marginBottom:"1%"
-    }} onClick={()=>navigate(navigateTo)}>{title}</button></div>
-  )
+    <div className="flex justify-center items-center w-full animate-pulse">
+      <button
+        className="rounded-2xl"
+        style={{
+          backgroundColor: background,
+          padding: "3%",
+          marginBottom: "1%",
+          border:"1px solid black"
+        }}
+        onClick={() => navigate(navigateTo)}
+      >
+        <span >{title}</span>
+      </button>
+    </div>
+  );
 }
 
 export default CustomButton

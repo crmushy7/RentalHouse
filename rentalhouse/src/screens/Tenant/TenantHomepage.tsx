@@ -12,6 +12,8 @@ import {
   Tabs,
 } from "@mantine/core";
 import Aboutus from "../../Aboutus";
+import Myfavorites from "../mainscreens/Myfavorites";
+import AllHouses from "../mainscreens/AllHouses";
 
 export default function TenantHomepage() {
   const theme = useMantineTheme();
@@ -43,7 +45,7 @@ export default function TenantHomepage() {
               <Tabs.Tab value="second">PAID APARTMENTS</Tabs.Tab>
               <Tabs.Tab value="third">MY FAVOURITES</Tabs.Tab>
               <Tabs.Tab value="four">ALL HOUSES</Tabs.Tab>
-              {/* <Tabs.Tab value="second">Second tab</Tabs.Tab> */}
+              {/* <Tabs.Tab value="six">Second tab</Tabs.Tab> */}
               <Tabs.Tab value="five"> ABOUT US</Tabs.Tab>
             </Tabs.List>
           </Tabs>
@@ -65,7 +67,7 @@ export default function TenantHomepage() {
       header={
         <Header height={{ base: 50, md: 70 }} p="md">
           <div
-            style={{ display: "flex", alignItems: "center", height: "100%" }}
+            style={{ display: "flex", alignItems: "center",justifyContent:"center", height: "100%" }}
           >
             <MediaQuery largerThan="sm" styles={{ display: "none" }}>
               <Burger
@@ -77,7 +79,15 @@ export default function TenantHomepage() {
               />
             </MediaQuery>
 
-            <Text>Application header</Text>
+            {/* TOPBAR */}
+            <Tabs value={activeTab} onTabChange={setActiveTab}>
+              <Tabs.Panel value="first">MY ACCOUNT</Tabs.Panel>
+              <Tabs.Panel value="second">PAID APARTMENTS</Tabs.Panel>
+              <Tabs.Panel value="third">MY FAVORITES</Tabs.Panel>
+              <Tabs.Panel value="four">ALL HOUSES</Tabs.Panel>
+              <Tabs.Panel value="six">FAVORITE HOUSES</Tabs.Panel>
+              <Tabs.Panel value="five">About us</Tabs.Panel>
+            </Tabs>
           </div>
         </Header>
       }
@@ -87,9 +97,11 @@ export default function TenantHomepage() {
         <Tabs.Panel value="first">My Account</Tabs.Panel>
         <Tabs.Panel value="second">All Apartments I Paid</Tabs.Panel>
         <Tabs.Panel value="third">
-          My Favourite Houses Yet to be paid
+          <Myfavorites />
         </Tabs.Panel>
-        <Tabs.Panel value="four">All Houses</Tabs.Panel>
+        <Tabs.Panel value="four">
+          <AllHouses />
+        </Tabs.Panel>
         <Tabs.Panel value="five">
           <Aboutus />
         </Tabs.Panel>

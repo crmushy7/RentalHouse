@@ -10,8 +10,11 @@ const Register: FC = () => {
     const [data]=useRegister();
   return (
     <>
-      <div className="flex flex-col h-screen  justify-evenly items-center" style={{}}>
-        <div className="flex flex-row justify-center items-center h-auto w-auto   bg-white rounded-full ">
+      <div
+        className="flex flex-col h-auto  justify-evenly items-center"
+        style={{}}
+      >
+        <div className="flex flex-row justify-center items-center h-40  w-auto   bg-white rounded-full ">
           <img
             className="flex rounded-full shadow-xl "
             src={Rental}
@@ -21,8 +24,16 @@ const Register: FC = () => {
             }}
           />
         </div>
-        <div className="flex flex-col items-start h-auto w-3/6  bg-white rounded-lg shadow-2xl" style={{marginTop:"2%",marginBottom:"2"}}>
-          <span className="flex underline justify-center items-center text-blue-600 w-full font-bold">
+        <div
+          className="flex flex-col items-start    bg-white rounded-lg shadow-2xl"
+          style={{
+            marginTop: "2%",
+            marginBottom: "2",
+            width: "500px",
+            height: "850px",
+          }}
+        >
+          <span className="flex underline justify-center items-center text-green-300 w-full font-bold">
             FILL YOUR DETAILS BELOW TO JOIN THE NETWORK!!
           </span>
           {data?.map((item) => {
@@ -36,8 +47,11 @@ const Register: FC = () => {
           })}
 
           <Account_gender />
-          <CustomLink title={"Back to login"} linkto={"/Login"} />
-          <CustomButton title="Register" navigateTo="/" background="green" />
+          <div className="flex w-11/12 justify-end ">
+            <CustomLink title={"Back to login"} linkto={"/Login"} />
+          </div>
+
+          <CustomButton title="Register" navigateTo="/" background="#59788E" />
         </div>
       </div>
     </>
