@@ -4,7 +4,6 @@ import Leftpic from "../../../Leftpic.jpg";
 
 const CustomcardMyhouses: FC = (props) => {
   const data = props;
-  console.log(data);
   return (
     <>
       <div className="flex w-56 h-72 border border-black flex-col">

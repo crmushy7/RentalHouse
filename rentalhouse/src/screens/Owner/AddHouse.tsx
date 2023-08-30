@@ -45,11 +45,19 @@ const AddHouse: FC = () => {
               display: "flex",
               justifyContent: "space-evenly",
               width: "100%",
-              padding:"4%"
+              padding: "4%",
             }}
           >
-            <CustomButton title="Add Photos" navigateTo="" background="green" />
-            <CustomButton title="Upload House" navigateTo="" background="green" />
+            <CustomButton
+              title="Add Photos"
+              navigateTo=""
+              background="#708090"
+            />
+            <CustomButton
+              title="Upload House"
+              navigateTo=""
+              background="#708090"
+            />
           </div>
         </div>
       </div>

@@ -8,7 +8,7 @@ const Custominput:FC<Custominputprops> = ({labeled,inputType,placeholder}) => {
         style={{
           marginLeft: "5%",
           marginTop: "5%",
-          color: "#AFEEEE",
+          color: "#808080",
           fontWeight: "bold",
         }}
       >
