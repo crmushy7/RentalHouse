@@ -35,13 +35,17 @@ const Forgotpassword:FC = () => {
             placeholder="Enter your email"
           />
           <div
-            style={{ display: "flex", width: "100%", justifyContent: "center",padding:"3%" }}
+            style={{
+              display: "flex",
+              width: "100%",
+              justifyContent: "center",
+              padding: "3%",
+            }}
           >
             <CustomButton
               title="RESET PASSWORD"
               navigateTo=" "
-              background="green"
-              
+              background="#696969"
             />
           </div>
         </div>

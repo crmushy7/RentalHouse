@@ -29,12 +29,6 @@ const UseAddHouse = () => {
         inputType: "text",
         placeholder: "Write your house description",
       },
-
-      {
-        labeled: "HOUSE PICTURE",
-        inputType: "text",
-        placeholder: "Add your house pictures",
-      },
     ]);
   });
   return [data];

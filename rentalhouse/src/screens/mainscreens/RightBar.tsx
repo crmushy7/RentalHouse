@@ -1,5 +1,5 @@
-import React from 'react'
-import Avatered from '../../assets/images/Avatared.jpeg'
+import React from "react";
+import Avatered from "../../assets/images/Avatared.jpeg";
 
 const RightBar = () => {
   return (
@@ -23,10 +23,17 @@ const RightBar = () => {
             <img className="flex rounded-full" src={Avatered} alt="pc" />
           </span>
           <span className="w-28 h-full ml-2 flex flex-col">
-            <span className="font-bold flex justify-between">
-              Robertson<span>3</span>
+            <span className="font-semibold flex justify-between">
+              Robertson
+              <span className="border justify-center items-center rounded-full bg-red-500 flex w-4 h-2/3 text-sm text-center">
+                <span className="text-sm">3</span>
+              </span>
             </span>
-            <span className="text-sm">Hello there how..</span>
+            <span className="relative inline-block text-sm overflow-hidden">
+              <span className="w-full block overflow-hidden whitespace-nowrap text-ellipsis">
+                Hello there whats up
+              </span>
+            </span>
           </span>
         </span>
         <span className="flex w-full h-12 mt-3 ">
@@ -34,10 +41,17 @@ const RightBar = () => {
             <img className="flex rounded-full" src={Avatered} alt="pc" />
           </span>
           <span className="w-28 h-full ml-2 flex flex-col">
-            <span className="font-bold flex justify-between">
-              Robertson<span>3</span>
+            <span className="font-semibold flex justify-between">
+              Robertson
+              <span className="border justify-center items-center rounded-full bg-red-500 flex w-4 h-2/3 text-sm text-center">
+                <span className="text-sm">3</span>
+              </span>
             </span>
-            <span className="text-sm">Hello there how..</span>
+            <span className="relative inline-block text-sm overflow-hidden">
+              <span className="w-full block overflow-hidden whitespace-nowrap text-ellipsis">
+                Hello there whats up
+              </span>
+            </span>
           </span>
         </span>{" "}
         <span className="flex w-full h-12 mt-3 ">
@@ -45,15 +59,26 @@ const RightBar = () => {
             <img className="flex rounded-full" src={Avatered} alt="pc" />
           </span>
           <span className="w-28 h-full ml-2 flex flex-col">
-            <span className="font-bold flex justify-between">
-              Robertson<span>3</span>
+            <span className="font-semibold flex justify-between">
+              Robertson
+              <span className="border justify-center items-center rounded-full bg-red-500 flex w-4 h-2/3 text-sm text-center">
+                <span className="text-sm">3</span>
+              </span>
             </span>
-            <span className="text-sm">Hello there how..</span>
+            <span className="relative inline-block text-sm overflow-hidden">
+              <span className="w-full block overflow-hidden whitespace-nowrap text-ellipsis">
+                Hello there whats up
+              </span>
+            </span>
           </span>
         </span>
       </span>
-      <span className="flex flex-col justify-evenly hover:cursor-pointer rounded-xl mt-8 h-44 w-5/6 bg-blue-400 border">
-        Search and find your favourite real estate<span>Learn more...</span>
+      <span className="flex flex-col justify-evenly hover:cursor-pointer rounded-xl mt-8 h-44 w-5/6 bg-blue-400 border p-2">
+        Search and find your favourite real estate
+        <span>
+          Learn more...
+          <i className="pi pi-arrow-right ml-3" />
+        </span>
       </span>
       <span className="flex flex-col justify-evenly items-center rounded-xl mt-8 h-44 w-5/6 border">
         <span className="text-blue-400">Help Center</span>
@@ -69,6 +94,6 @@ const RightBar = () => {
       </span>
     </div>
   );
-}
+};
 
-export default RightBar
+export default RightBar;

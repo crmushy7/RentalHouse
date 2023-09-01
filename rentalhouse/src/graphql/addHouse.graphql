@@ -1,0 +1,12 @@
+mutation CreateHouseInput($input: CreateHouseInput!) {
+  createHouse(createHouseInput: $input) {
+    Description
+    District
+    Region
+    Ward
+    imgUrl
+    status
+    price
+    
+  }
+}

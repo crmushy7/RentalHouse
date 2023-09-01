@@ -1,4 +1,6 @@
-import React from 'react'
+import React from "react";
+import House from "./assets/images/House.jpeg";
+import Key from "./assets/images/Key.jpeg";
 
 const Aboutus = () => {
   return (
@@ -55,31 +57,35 @@ const Aboutus = () => {
     //   <br /> RentalHouse Company
     // </div>
     <div className="flex flex-col h-screen w-full justify-center bg-stone-100 items-center">
-      <div className="w-11/12 h-full border border-black justify-between flex flex-col">
+      <div className="w-11/12 h-full  flex flex-col">
         <div
           style={{
             display: "flex",
             flexDirection: "column",
-            border: "1px solid blue",
+            height: "850px",
           }}
-          className="h-96"
+          className=" rounded-xl w-full"
         >
-          <div className="flex h-3/5 w-full border">
-            <img src="/" alt="pc" />
+          <span className="flex w-full justify-center items-center">
+            Welcome to RentalHouse{" "}
+          </span>
+          <div className="flex h-4/5 w-full border">
+            <img className="flex rounded-t-md  w-full" src={House} alt="pc" />
           </div>
-          <div className="flex h-2/5">
-            <div className="flex w-1/3 border">
-              <img src="/" alt="pic" />
+          <div className="flex mt-4 w-full flex-col items-center justify-center">
+            <span>Welcome to RentalHouse </span>
+            <hr className="border-1 w-4/5 border-blue-500 " />
+          </div>
+          <div className="flex rounded-b-xl mt-4 h-1/5 bg-white">
+            <div className="flex w-1/3 ">
+              <img className="rounded-bl-xl" src={Key} alt="pic" />
             </div>
-            <div className="flex w-2/3 border">
+            <div className="flex   w-2/3 ">
               <span className="flex justify-center items-center text-sm">
                 Welcome to RentalHouse Company, where comfort meets convenience
                 and your dream home becomes a reality. With a passion for
                 creating exceptional living spaces and a commitment to exceeding
-                your expectations, we proudly introduce ourselves as your
-                trusted partner in finding the perfect rental home. Our Story
-                Founded with a vision to redefine rental living, RentalHouse
-                Company began as a labor of love
+                your expectations.
               </span>
             </div>
           </div>
@@ -89,21 +95,24 @@ const Aboutus = () => {
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-evenly",
-            height: "200px",
-            border: "1px solid blue",
+            height: "250px",
           }}
+          className="mt-8"
         >
-          <div className="flex w-1/3 shadow-xl h-full justify-center items-center bg-white flex-col ">
+          <div className="flex w-1/3 shadow-2xl rounded-lg h-full justify-center items-center bg-white flex-col ">
             <span>Tenants</span>
-            <span>
+            <hr className="border-1 w-4/5 border-blue-500 " />
+
+            <span className="flex p-2 justify-center items-center">
               Finding your ideal rental home is our priority. Discover
               thoughtfully curated properties designed to fit your lifestyle and
               create lasting memories
             </span>
           </div>
-          <div className="flex w-1/3 shadow-xl h-full justify-center items-center bg-white flex-col ">
+          <div className="flex w-1/3 shadow-2xl rounded-lg h-full justify-center items-center bg-white flex-col ">
             <span>Owners</span>
-            <span className='text-sm'>
+            <hr className="border-1 w-4/5 border-blue-500 " />
+            <span className="text-sm p-2 flex justify-center items-center">
               we're here to simplify property management for you. Trust us to
               handle tenant relationships, maintenance, and everything in
               between, so you can enjoy the rewards of your investment
@@ -115,12 +124,11 @@ const Aboutus = () => {
             display: "flex",
             flexDirection: "column",
             height: "20%",
-            border: "1px solid blue",
           }}
         ></div>
       </div>
     </div>
   );
-}
+};
 
-export default Aboutus
+export default Aboutus;

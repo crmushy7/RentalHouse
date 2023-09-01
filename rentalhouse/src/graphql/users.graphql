@@ -1,10 +1,11 @@
-query GetUsers {
+query getUsers {
   users {
     firstName
     middleName
     lastname
-    accountType
+    gender
     phoneNumber
     username
+    accountType
   }
 }
