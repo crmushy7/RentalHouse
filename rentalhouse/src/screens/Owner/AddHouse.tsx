@@ -13,6 +13,7 @@ import { GraphQLError } from "graphql";
 import graphqlRequestClient from "../../lib/clients/GraphqlRequestClients";
 import { useQueryClient } from "@tanstack/react-query";
 import { getUserAccessToken } from "../../utils/localStorageUtils";
+import { notifications } from "@mantine/notifications";
 
 const AddHouse: FC = () => {
   const [data] = UseAddHouse();
@@ -24,16 +25,17 @@ const AddHouse: FC = () => {
   const [imgUrl, setImgurl] = useState<Array>([]);
   const [value, setValue] = useState<string>("");
   const [houseRegion, setHouseregion] = useState<string>("");
+  const [houseName, setHousename] = useState<string>("");
   const [houseDistrict, setHouseDistrict] = useState<string>("");
   const [houseWard, setHouseWard] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [price, setPrice] = useState<number>(0);
+  const [price, setPrice] = useState<number>();
   const { mutate } = useCreateHouseInputMutation(
     graphqlRequestClient.setHeaders({ Authorization: `Bearer ${accessToken}` }),
     {
       onSuccess: (data: CreateHouseInputMutation) => {
         queryClient.invalidateQueries(["createUserInput"]);
-        return console.log("mutation data", data);
+        return success();
       },
       onError: (error: GraphQLError) => {
         const errorMessage = Array.isArray(
@@ -43,9 +45,40 @@ const AddHouse: FC = () => {
           : error.response.errors[0].message.message;
 
         setGraphQLError(errorMessage);
+        errorDisplay(erroMessage);
       },
     }
   );
+  const success = (accounttype) => {
+    notifications.show({
+      title: "",
+      message: `Success!!`,
+      styles: (theme: { colors: { green: any[] }; white: any }) => ({
+        root: {
+          backgroundColor: theme.colors.green[6],
+          borderColor: theme.colors.green[6],
+
+          "&::before": { backgroundColor: theme.white },
+        },
+
+        title: { color: theme.white },
+        description: { color: theme.white },
+        closeButton: {
+          color: theme.white,
+          "&:hover": { backgroundColor: theme.colors.green[7] },
+        },
+      }),
+      autoClose: 1000,
+    });
+    setTimeout(() => {
+      setHousename("")
+      setHouseregion("")
+      setHouseDistrict("")
+      setHouseWard("")
+      setPrice("")
+      setDescription("")
+    }, 1000);
+  };
 
   const addImage = () => {
     if (value.length != 0) {
@@ -56,19 +89,43 @@ const AddHouse: FC = () => {
       window.alert("url cannot be empty");
     }
   };
-  const addHouse = async () => {
-    console.log(imgUrl);
+  const errorDisplay = (errorMessage) => {
+    notifications.show({
+      title: "Oops!!",
+      message: `${errorMessage}`,
+      styles: (theme: { colors: { red: any[] }; white: any }) => ({
+        root: {
+          backgroundColor: theme.colors.red[6],
+          borderColor: theme.colors.red[6],
 
+          "&::before": { backgroundColor: theme.white },
+        },
+
+        title: { color: theme.white },
+        description: { color: theme.white },
+        closeButton: {
+          color: theme.white,
+          "&:hover": { backgroundColor: theme.colors.red[7] },
+        },
+      }),
+      autoClose: 5000,
+    });
+  };
+  const addHouse = async () => {
     if (
-      houseRegion.length === 0 &&
-      houseDistrict.length === 0 &&
-      houseWard.length === 0 &&
-      price?.toString().length === 0 &&
+      houseName.length === 0 ||
+      houseRegion.length === 0 ||
+      houseDistrict.length === 0 ||
+      houseWard.length === 0 ||
+      price?.toString().length === 0 ||
       description.length === 0
     ) {
-      alert("All fields are required");
+      errorDisplay("All fields required!");
+    } else if (imgUrl.length === 0) {
+      errorDisplay("Add images!");
+    } else if (imgUrl.length < 5) {
+      errorDisplay(`Add ${5 - imgUrl.length} more images`);
     } else {
-      console.log(houseDistrict);
       await mutate({
         input: {
           Region: houseRegion,
@@ -78,20 +135,15 @@ const AddHouse: FC = () => {
           Description: description,
           imgUrl: imgUrl,
           price: price,
+          name: houseName,
         },
       });
     }
-
-    if (imgUrl.length === 0) {
-      window.alert("Add images!!!");
-    } else {
-      // window.alert("success");
-    }
   };
   return (
-    <>
+    <div className="flex w-full overflow-auto h-screen">
       <div
-        className="flex flex-col h-full  w-full ml-2  justify-center items-center"
+        className={`flex flex-col h-full  w-full overflow-auto md:items-center md:justify-center  `}
         style={{}}
       >
         <div className="flex flex-row justify-center items-center h-auto w-auto   bg-white rounded-full ">
@@ -105,7 +157,7 @@ const AddHouse: FC = () => {
           />
         </div>
         <div
-          className="flex flex-col justify-center  h-auto w-full  bg-white rounded-lg shadow-2xl"
+          className={`flex flex-col justify-center  h-auto w-[570px] xl:w-[760px] sm:w-[550px] lg:w-[560px] md:w-[400px] 2xl:w-[760px]  bg-white rounded-lg shadow-2xl`}
           style={{ marginTop: "2%", marginBottom: "2" }}
         >
           <span className="flex underline justify-center items-center text-blue-600 w-full font-bold">
@@ -113,6 +165,31 @@ const AddHouse: FC = () => {
           </span>
           <div className="flex w-full justify-evenly ">
             <div className="flex w-11/12  flex-col">
+              <span
+                style={{
+                  marginTop: "5%",
+                  color: "#808080",
+                  fontWeight: "bold",
+                }}
+              >
+                HOUSE NAME
+              </span>
+              <input
+                style={{
+                  backgroundColor: "whitesmoke",
+                  width: "100%",
+                  padding: "2%",
+                  borderRadius: "20px",
+                }}
+                placeholder="Add house name"
+                type="text"
+                value={houseName}
+                onChange={(e) => setHousename(e.target.value)}
+              />
+            </div>
+          </div>{" "}
+          <div className="flex w-full justify-evenly ">
+            <div className="flex w-11/12   flex-col">
               <span
                 style={{
                   marginTop: "5%",
@@ -275,7 +352,7 @@ const AddHouse: FC = () => {
                 onClick={addImage}
                 className="flex rounded-full bg-gray-400"
               >
-                <span className="p-3">Add photos</span>
+                <span className="p-1 text-sm">Add photos</span>
               </button>
             </div>
           </div>
@@ -296,7 +373,7 @@ const AddHouse: FC = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

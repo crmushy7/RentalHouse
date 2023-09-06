@@ -2,7 +2,7 @@ import { BackgroundImage } from "@mantine/core";
 import { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import colors from "../../../lib/color/colors";
-import { AccountType,Gender } from "../../../lib/enums/enum";
+import { AccountType, Gender } from "../../../lib/enums/enum";
 import CustomInputField from "../component/custom-input-field";
 import RadioButton from "./components/radio-button";
 import CustomButton from "../component/custom-buttom";
@@ -14,6 +14,7 @@ import graphqlRequestClient from "../../../lib/clients/GraphqlRequestClients";
 import { useQueryClient } from "@tanstack/react-query";
 import { GraphQLError } from "graphql";
 import { Select } from "@chakra-ui/react";
+import { notifications } from "@mantine/notifications";
 
 const RegisterPage: FC = () => {
   const navigate = useNavigate();
@@ -21,44 +22,74 @@ const RegisterPage: FC = () => {
   const [firstName, setFirstName] = useState("");
   const [middleName, setMiddleNAme] = useState("");
   const [lastname, setLastName] = useState("");
-  const [gender, setGender] = useState("");
+  const [selectedGender, setSelectedGender] = useState("Select Gender");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
-  const [accountType, setAccountType] = useState("");
+  const [accountType, setAccountType] = useState("Account type");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [graphQLError, setGraphQLError] = useState<string | null>(null);
-  const genderOptions = ["Male", "Female", "Non-binary", "Other"]; 
-  const Acctypeoptions=["Tenant","Owner"]
+  const genderOptions = ["Male", "Female", "Non-binary", "Other"];
+  const Acctypeoptions = ["Tenant", "Owner"];
   const { mutate } = useCreateUserInputMutation(graphqlRequestClient, {
     onSuccess: (data: CreateUserInputMutation) => {
       queryClient.invalidateQueries(["createUserInput"]);
-      return console.log("mutation data", data);
+      return success();
     },
     onError: (error: GraphQLError) => {
       const errorMessage = Array.isArray(
-        error.response.errors[0].message.message
+        error.response.errors[0].extensions.originalError.message
       )
-        ? error.response.errors[0].message.message.join(", ")
-        : error.response.errors[0].message.message;
-
+        ? error.response.errors[0].extensions.originalError.message.join(", ")
+        : error.response.errors[0].extensions.originalError.message;
       setGraphQLError(errorMessage);
+      errorDisplay(errorMessage);
     },
   });
+  const errorDisplay = (errorMessage) => {
+    notifications.show({
+      title: "Oops!!",
+      message: `${errorMessage}`,
+      styles: (theme: { colors: { red: any[] }; white: any }) => ({
+        root: {
+          backgroundColor: theme.colors.red[6],
+          borderColor: theme.colors.red[6],
+
+          "&::before": { backgroundColor: theme.white },
+        },
+
+        title: { color: theme.white },
+        description: { color: theme.white },
+        closeButton: {
+          color: theme.white,
+          "&:hover": { backgroundColor: theme.colors.red[7] },
+        },
+      }),
+      autoClose: 5000,
+    });
+  };
+  const success = () => {
+    
+      navigate("/auth");
+    
+  };
 
   const handleRegister = async () => {
     if (
-      firstName.length === 0 &&
-      middleName.length === 0 &&
-      lastname.length === 0 &&
-      gender.length === 0 &&
-      phoneNumber.length === 0 &&
-      email.length === 0 &&
+      firstName.length === 0 ||
+      middleName.length === 0 ||
+      lastname.length === 0 ||
+      phoneNumber.length === 0 ||
+      email.length === 0 ||
       password.length === 0
     ) {
-      alert("All fields are required");
+      errorDisplay("All fields required!")
+    } else if (selectedGender === "Select Gender") {
+      errorDisplay("Choose Gender!");
+    } else if (accountType === "Account type") {
+      errorDisplay("Account Type required!");
     } else if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      errorDisplay("Password does not match!");
     } else {
       await mutate({
         input: {
@@ -66,7 +97,7 @@ const RegisterPage: FC = () => {
           firstName: firstName,
           middleName: middleName,
           lastname: lastname,
-          gender: gender,
+          gender: selectedGender,
           phoneNumber: phoneNumber,
           accountType: accountType,
           password: password,
@@ -77,6 +108,12 @@ const RegisterPage: FC = () => {
 
   const handleLogin = () => {
     navigate("/auth");
+  };
+  const handleGenderChange = (event) => {
+    setSelectedGender(event.target.value);
+  };
+  const handleAcctype = (event) => {
+    setAccountType(event.target.value);
   };
 
   return (
@@ -118,7 +155,7 @@ const RegisterPage: FC = () => {
               fontSize={"14px"}
               padding={6}
               width={"100%"}
-              placeholder={"First nName"}
+              placeholder={"First Name"}
               onChange={setFirstName}
             />
             <CustomInputField
@@ -192,8 +229,10 @@ const RegisterPage: FC = () => {
               <Select
                 borderColor="tomato"
                 color="whitesmoke"
-                className="text-red-500 bg-black "
+                className="text-red-500 bg-black"
                 placeholder="Select Gender"
+                value={selectedGender}
+                onChange={handleGenderChange}
               >
                 {genderOptions.map((gender, index) => (
                   <option key={index} value={gender}>
@@ -208,6 +247,8 @@ const RegisterPage: FC = () => {
                 color="whitesmoke"
                 className="text-red-500 bg-black "
                 placeholder=" Account type"
+                value={accountType}
+                onChange={handleAcctype}
               >
                 {Acctypeoptions.map((Acctype, index) => (
                   <option key={index} value={Acctype}>

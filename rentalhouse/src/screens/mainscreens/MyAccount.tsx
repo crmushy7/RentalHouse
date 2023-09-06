@@ -22,68 +22,20 @@ const MyAccount = () => {
   }, []);
 
   return (
-    <div className="flex flex-col justify-center bg-stone-200 h-screen w-full items-center">
-      <div
-        style={{
-          display: "flex",
-          height: "90%",
-          width: "85%",
-        }}
-        className="flex-col "
-      >
+    <div className="flex flex-col justify-center bg-stone-200 h-screen overflow-auto w-full items-center">
+      <div className="flex-col flex justify-around h-5/6 w-5/6 ">
         <span className="font-bold">Personal Settings</span>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            height: "35%",
-            backgroundColor: "whitesmoke",
-          }}
-          className="justify-evenly rounded-lg"
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              height: "70%",
-              backgroundColor: "whitesmoke",
-            }}
-            className="flex sm:flex-col"
-          >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                height: "100%",
-                width: "50%",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  height: "60%",
-                  width: "100%",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
+        <div className="flex flex-col rounded-lg  w-full h-3/4  md:h-1/2 p-5 sm:flex-row sm:flex sm:w-full border-4 sm:h-3/4 sm:p-5 md:flex-col lg:flex-col 2xl:flex-col">
+          <div className="flex flex-col rounded-lg  w-full h-full   p-5 sm:flex-col sm:flex sm:w-full sm:h-full sm:p-5 md:flex-row lg:flex-row">
+            <div className="flex flex-col rounded-lg justify-between items-center w-full h-full  p-5 sm:flex-row sm:flex sm:w-full sm:h-full sm:p-5 md:flex-col lg:w-1/2 lg:flex-col">
+              <div className="flex h-2/3">
                 <img
                   className="flex rounded-md"
                   src={Avatar}
                   alt="profile picture"
                 />
               </div>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  height: "15%",
-                  width: "100%",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
+              <div className="flex h-1/5">
                 <button
                   style={{ border: "1px solid black" }}
                   className="rounded-full"
@@ -92,15 +44,7 @@ const MyAccount = () => {
                 </button>
               </div>
             </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                height: "100%",
-                width: "50%",
-                justifyContent: "space-around",
-              }}
-            >
+            <div className="flex flex-col justify-evenly h-full w-full">
               {data?.map((item, index) => {
                 return (
                   <CustomSpandiv
@@ -114,45 +58,28 @@ const MyAccount = () => {
             </div>
           </div>
           <div className="flex justify-evenly ">
-            <a href="#" className="text-blue-500">
-              Change name |
+            <a href="#" className="text-blue-500 border flex justify-center">
+              Change name
             </a>
             <a href="#" className="text-blue-500">
-              Change email |
+              Change email
             </a>
             <a href="#" className="text-blue-500">
-              Change password |
+              Change password
             </a>
             <a href="#" className="text-blue-500">
-              Change no |
+              Change no
             </a>
           </div>
         </div>
         <span className="mt-10 font-bold">Account Settings</span>
 
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            height: "5%",
-            width: "100%",
-            backgroundColor: "whitesmoke",
-          }}
-          className="rounded-lg"
-        >
+        <div className="flex h-1/6 rounded-lg" >
           <DropdownMenu country={countryname.country} />
         </div>
         <span className="mt-10 font-bold">Terminate Account</span>
 
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            height: "10%",
-            backgroundColor: "whitesmoke",
-          }}
-          className="rounded-lg"
-        >
+        <div className="flex h-1/6   rounded-lg">
           <span>
             Terminating your account will lead to permanent deletion of your
             data!

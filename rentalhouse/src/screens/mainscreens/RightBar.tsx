@@ -18,7 +18,7 @@ const RightBar = () => {
         <span className="text-sm font-bold flex justify-around w-full">
           Recent Messages<span>...</span>
         </span>
-        <span className="flex w-full h-12 mt-3 ">
+        <span className="flex w-full h-20 mt-3 ">
           <span className="w-12 h-full  flex justify-center rounded-full">
             <img className="flex rounded-full" src={Avatered} alt="pc" />
           </span>
@@ -36,7 +36,7 @@ const RightBar = () => {
             </span>
           </span>
         </span>
-        <span className="flex w-full h-12 mt-3 ">
+        <span className="flex w-full h-20  mt-3 ">
           <span className="w-12 h-full border flex justify-center rounded-full">
             <img className="flex rounded-full" src={Avatered} alt="pc" />
           </span>
@@ -54,7 +54,7 @@ const RightBar = () => {
             </span>
           </span>
         </span>{" "}
-        <span className="flex w-full h-12 mt-3 ">
+        <span className="flex w-full h-20 mt-3 ">
           <span className="w-12 h-full  flex justify-center rounded-full">
             <img className="flex rounded-full" src={Avatered} alt="pc" />
           </span>

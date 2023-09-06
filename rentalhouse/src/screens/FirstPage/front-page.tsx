@@ -1,15 +1,64 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { HouseProps } from "./components/house-type";
 import { HOUSE } from "./house";
 import HouseUI from "./components/houseUI";
 import colors from "../../lib/color/colors";
 import CustomButton from "../Authentication/component/custom-buttom";
+import { useGetAllHousesQuery, GetAllHousesQuery } from "../../generated/graphql";
+import graphqlRequestClient from "../../lib/clients/GraphqlRequestClients";
+import { getUserAccessToken } from "../../utils/localStorageUtils";
+import CustomcardAllhouses from "../mainscreens/components/CustomcardAllhouses";
 
 const FrontPage: FC = () => {
   const navigate = useNavigate();
 
   const [houses, setHouses] = useState<HouseProps[]>(HOUSE);
+  
+    const [accessToken, setAccessToken] = useState<string | null>(
+      getUserAccessToken()
+    );
+    const [shouldFetchData, setShouldFetchData] = useState(false);
+
+    useEffect(() => {
+      console.log(accessToken);
+      if (accessToken) {
+        setShouldFetchData(true);
+      }
+    }, [accessToken]);
+
+    const { isLoading, error, data, refetch } = useGetAllHousesQuery<
+      GetAllHousesQuery,
+      Error
+    >(
+      graphqlRequestClient.setHeaders({
+        Authorization: `Bearer ${accessToken}`,
+      }),
+      {},
+      { enabled: shouldFetchData }
+    );
+
+    useEffect(() => {
+      if (accessToken && shouldFetchData) {
+        refetch();
+      }
+    }, [accessToken, shouldFetchData, refetch]);
+
+    if (!accessToken) {
+      return <p>Please log in to view your houses.</p>;
+    }
+
+    if (isLoading) return <p>Loading...</p>;
+    if (error) {
+      const errorMessage =
+        error.response &&
+        error.response.errors &&
+        error.response.errors.length > 0
+          ? error.response.errors[0].message.message
+          : "An error occurred";
+      return <p>{errorMessage}</p>;
+    }
+
 
   const handleLoginButton = () => {
     navigate("/auth");
@@ -21,18 +70,11 @@ const FrontPage: FC = () => {
 
   const renderHouses = () => {
     return (
-      <ul className="flex flex-row gap-3 overscroll-auto">
-        {houses.map((house, index) => (
-          <li key={index}>
-            <HouseUI
-              name={house.name}
-              price={house.price}
-              location={house.location}
-              img={house.img}
-            />
-          </li>
+      <div className="flex flex-row gap-3 overscroll-auto">
+        {data?.houses.map((item, index) => (
+          <CustomcardAllhouses key={index} data={item} />
         ))}
-      </ul>
+      </div>
     );
   };
 
@@ -82,7 +124,7 @@ const FrontPage: FC = () => {
           </div>
         </div>
         <img
-          className="w-full h-1/2 rounded-br-lg rounded-full flex justify-center items-center sm:w-1/2 sm:h-full sm:rounded-none sm:flex sm:justify-center sm:items-center 2xl:h-full"
+          className="w-full h-1/2 rounded-lg flex justify-center items-center sm:w-1/2 sm:h-full  sm:flex sm:justify-center sm:items-center 2xl:h-full"
           src="https://www.eliteholidayhomes.com.au/wp-content/uploads/2023/07/banner3-1.jpg"
           alt="image"
         />

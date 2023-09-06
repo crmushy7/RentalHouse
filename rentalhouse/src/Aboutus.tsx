@@ -62,14 +62,14 @@ const Aboutus = () => {
           style={{
             display: "flex",
             flexDirection: "column",
-            height: "850px",
+            height: "75%",
           }}
           className=" rounded-xl w-full"
         >
           <span className="flex w-full justify-center items-center">
             Welcome to RentalHouse{" "}
           </span>
-          <div className="flex h-4/5 w-full border">
+          <div className="flex h-3/5 w-full border">
             <img className="flex rounded-t-md  w-full" src={House} alt="pc" />
           </div>
           <div className="flex mt-4 w-full flex-col items-center justify-center">
@@ -95,7 +95,7 @@ const Aboutus = () => {
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-evenly",
-            height: "250px",
+            height: "20%",
           }}
           className="mt-8"
         >
@@ -119,13 +119,6 @@ const Aboutus = () => {
             </span>
           </div>
         </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            height: "20%",
-          }}
-        ></div>
       </div>
     </div>
   );

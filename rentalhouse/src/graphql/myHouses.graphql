@@ -1,0 +1,22 @@
+query getMyHouses {
+  myHouse {
+    Description
+    District
+    Region
+    Ward
+    imgUrl
+    name
+    price
+    status
+    _id
+    user {
+      firstName
+      middleName
+      lastname
+      gender
+      phoneNumber
+      username
+      accountType
+    }
+  }
+}

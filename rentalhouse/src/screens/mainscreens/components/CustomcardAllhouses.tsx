@@ -2,12 +2,17 @@ import React, { FC } from "react";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Leftpic from "../../../Leftpic.jpg";
 import { BackgroundImage } from "@mantine/core";
+import { useNavigate } from "react-router";
 
 const CustomcardAllhouses: FC = (props) => {
-  const data = props;
+  const navigate = useNavigate();
+  const {data}=props;
+  const amount = parseInt(data.price)
+
+  
   return (
     <>
-      <div className="flex justify-evenly w-60 h-72 bg-white  shadow-2xl rounded-lg  flex-col">
+      <div  className="flex justify-evenly w-80 h-72 bg-white  shadow-2xl rounded-lg  flex-col">
         <div
           style={{
             display: "flex",
@@ -19,26 +24,19 @@ const CustomcardAllhouses: FC = (props) => {
           }}
           className="rounded-xl"
         >
-          <div
-            style={{
-              display: "flex",
-              height: "75%",
-              width: "90%",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
+          <div className="flex h-3/4 w-11/12 justify-center ">
             <BackgroundImage
-              className="h-full w-full rounded-lg justify-between flex flex-col"
-              src={Leftpic}
+              className="h-full hover:cursor-pointer w-full rounded-lg justify-end items-end flex flex-col"
+              src={data.imgUrl[0]}
+               onClick={() => navigate('/Detailpage', {replace: true, state: data})}
             >
-              <span className=" w-full rounded-full h-10 justify-end flex">
+              {/* <span className=" w-full rounded-full h-10 justify-end flex">
                 <span className="w-7 hover:cursor-pointer flex shadow-2xl rounded-full h-7 justify-center items-center bg-white">
                   <FavoriteBorderIcon />
                 </span>
-              </span>
+              </span> */}
               <span className="flex w-full justify-end items-end">
-                <span className="w-10 mr-2 mb-3 bg-white">$500</span>
+                <span className="w-auto mr-2 mb-3 bg-white">${amount}</span>
               </span>
             </BackgroundImage>
             {/* <img className="rounded-lg" src={Leftpic} alt="pc" /> */}
@@ -53,12 +51,12 @@ const CustomcardAllhouses: FC = (props) => {
             }}
           >
             <span>
-              <span className="font-semibold mt-2">Mushi Apartment</span>
+              <span className="font-semibold mt-2">{data.name}</span>
             </span>
 
             <span>
               <span className="flex w-full justify-center items-center">
-                Status:Available
+                Status:{data.status}
               </span>
             </span>
           </div>

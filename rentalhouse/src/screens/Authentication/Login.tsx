@@ -61,7 +61,7 @@ import { FC, useState } from "react";
 import { BackgroundImage } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-
+import { notifications } from "@mantine/notifications";
 import { GraphQLError } from "graphql";
 import {
   useLoginUserInputMutation,
@@ -85,20 +85,46 @@ const Login: FC = () => {
     onSuccess: (data: LoginUserInputMutation) => {
       queryClient.invalidateQueries(["LoginUserInput"]);
       saveUserData(data);
-      console.log(data);
-      navigate("/home");
-      return;
+      console.log(data.login.user.accountType);
+      const accounttype = data.login.user.accountType;
+      return success(accounttype);
     },
     onError: (error: GraphQLError) => {
-      const errorMessage = Array.isArray(
-        error.response.errors[0].message.message
-      )
-        ? error.response.errors[0].message.message.join(", ")
-        : error.response.errors[0].message.message;
-
+      // const errorMessage = Array.isArray(
+      //   error.response.errors[0].message.message
+      // )
+      //   ? error.response.errors[0].message.message.join(", ")
+      //   : error.response.errors[0].message.message;
+      const errorMessage = error.response.errors[0].message;
       setGraphQLError(errorMessage);
+      console.log(errorMessage)
+      errorDisplay(errorMessage);
     },
   });
+  const errorDisplay = (errorMessage) => {
+    
+    notifications.show({
+      title: "Oops!!",
+      message: `${errorMessage}`,
+      styles: (theme: { colors: { red: any[] }; white: any }) => ({
+        root: {
+          backgroundColor: theme.colors.red[6],
+          borderColor: theme.colors.red[6],
+
+          "&::before": { backgroundColor: theme.white },
+        },
+
+        title: { color: theme.white },
+        description: { color: theme.white },
+        closeButton: {
+          color: theme.white,
+          "&:hover": { backgroundColor: theme.colors.red[7] },
+        },
+      }),
+      autoClose: 5000, 
+    });
+      
+  };
 
   const handleLogin = () => {
     mutate({
@@ -110,7 +136,37 @@ const Login: FC = () => {
   };
 
   const handleForgetPassword = () => {
-    alert("forgot password");
+    navigate("/ForgotPassword");
+  };
+  const success = (accounttype) => {
+    notifications.show({
+      title: "",
+      message: `Success!!`,
+      styles: (theme: { colors: { green: any[] }; white: any }) => ({
+        root: {
+          backgroundColor: theme.colors.green[6],
+          borderColor: theme.colors.green[6],
+
+          "&::before": { backgroundColor: theme.white },
+        },
+
+        title: { color: theme.white },
+        description: { color: theme.white },
+        closeButton: {
+          color: theme.white,
+          "&:hover": { backgroundColor: theme.colors.green[7] },
+        },
+      }),
+      autoClose: 1000,
+    });
+    setTimeout(()=>{
+      if (accounttype === "Owner") {
+        navigate("/home");
+      } else {
+        navigate("/TenantHomepage");
+      }
+    },1000)
+    
   };
 
   return (

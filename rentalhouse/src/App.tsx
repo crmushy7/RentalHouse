@@ -10,6 +10,7 @@ import RightBar from "./screens/mainscreens/RightBar";
 import FrontPage from "./screens/FirstPage/front-page";
 import RegisterPage from "./screens/Authentication/registration/register";
 import Users from "./screens/mainscreens/PaidHouses";
+import EditHouse from "./screens/Owner/EditHouse";
 
 const App: FC = () => {
   return (
@@ -24,6 +25,8 @@ const App: FC = () => {
       <Route path="/DetailedHouse" element={<DetailedHouse />} />
       <Route path="/users" element={<Users />} />
       <Route path="/Rightbar" element={<RightBar />} />
+      <Route path="/Edithouse" element={<EditHouse />} />
+      <Route path="/Detailpage" element={<DetailedHouse />} />
     </Routes>
   );
 };

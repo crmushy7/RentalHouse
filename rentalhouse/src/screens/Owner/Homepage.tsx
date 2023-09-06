@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AppShell,
   Navbar,
@@ -19,15 +19,38 @@ import Myhouses from "./Myhouses";
 import MyAccount from "../mainscreens/MyAccount";
 import RightBar from "../mainscreens/RightBar";
 import Searchbar from "../mainscreens/Searchbar";
+import { getUserData } from "../../utils/localStorageUtils";
+import { useNavigate } from "react-router";
+import { LoginUserInputMutation } from "../../generated/graphql";
 
 export default function Homepage() {
   const theme = useMantineTheme();
   const [activeTab, setActiveTab] = useState<string | null>("first");
   const [opened, setOpened] = useState(false);
+  const [user, setUser] = useState<LoginUserInputMutation | null>(
+    getUserData() ?? null
+  );
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const userData = getUserData();
+    if (userData !== null) {
+      setUser(userData);
+    }
+  }, []);
 
   const setNav = (e: string) => {
     setActiveTab(e);
   };
+  const logout  =()=>{
+     setTimeout(() => {
+       // Redirect to the login page or another route after logout
+       // You can replace '/login' with your desired route
+       navigate("/");
+
+       // Reset the logging out state
+     }, 1000);
+  }
   return (
     <AppShell
       styles={{
@@ -46,7 +69,7 @@ export default function Homepage() {
           hiddenBreakpoint="sm"
           hidden={!opened}
           width={{ sm: 180, lg: 180 }}
-          className="flex  w-auto items-start  text-left"
+          className="flex  w-auto items-start justify-between  text-left"
         >
           {/* left navbar */}
           <Tabs
@@ -95,6 +118,19 @@ export default function Homepage() {
               </Tabs.Tab>
             </Tabs.List>
           </Tabs>
+          <div className="flex flex-col">
+            <span className="hover:cursor-pointer">
+              {" "}
+              <i className="text-blue-700  pi pi-user mr-2" />
+              <span>{user?.login.user.firstName}</span>
+            </span>
+            <span className="hover:cursor-pointer" onClick={logout}>
+              <span>
+                <i className="pi pi-sign-out mr-2" />
+              </span>
+              <span>Log Out</span>
+            </span>
+          </div>
         </Navbar>
       }
       aside={
