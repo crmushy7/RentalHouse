@@ -2,7 +2,7 @@ import { FC } from "react"
 
 const CustomSpandiv :FC<Custominputprops> = ({labeled,inputType,placeholder}) => {
   return (
-    <div style={{border:"1px solid white",marginTop:'5%'}} className="bg-white shadow-xl"><span className="font-bold ">{labeled}:</span><span>{placeholder}</span></div>
+    <div style={{marginTop:'5%'}} className="bg-white border border-slate-200 rounded-lg p-2"><span className="font-bold p-3">{labeled}:</span><span>{placeholder}</span></div>
   )
 }
 

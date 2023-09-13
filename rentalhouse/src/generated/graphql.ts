@@ -25,6 +25,21 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type ContractType = {
+  __typename?: 'ContractType';
+  Duration: Scalars['String']['output'];
+  Rent_per_terms: Scalars['String']['output'];
+  Total_rent: Scalars['String']['output'];
+  _id: Scalars['ID']['output'];
+};
+
+export type CreateContractInput = {
+  Duration: Scalars['String']['input'];
+  HouseID: Scalars['ID']['input'];
+  Rent_per_terms: Scalars['String']['input'];
+  Total_rent: Scalars['String']['input'];
+};
+
 export type CreateHouseInput = {
   Description: Scalars['String']['input'];
   District: Scalars['String']['input'];
@@ -74,13 +89,21 @@ export type LoginUserInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createContract: ContractType;
   createHouse: HouseType;
   createUser: UserType;
   login: LoginResponse;
+  removeContract: ContractType;
   removeHouse: HouseType;
   removeUser: UserType;
   updateHouse: Scalars['String']['output'];
-  updateUser: UserType;
+  updatePassword: Scalars['String']['output'];
+  updateUser: Scalars['String']['output'];
+};
+
+
+export type MutationCreateContractArgs = {
+  createContractInput: CreateContractInput;
 };
 
 
@@ -99,6 +122,11 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationRemoveContractArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
 export type MutationRemoveHouseArgs = {
   id: Scalars['Int']['input'];
 };
@@ -114,17 +142,29 @@ export type MutationUpdateHouseArgs = {
 };
 
 
+export type MutationUpdatePasswordArgs = {
+  updatePasswordInput: UpdatePasswordInput;
+};
+
+
 export type MutationUpdateUserArgs = {
   updateUserInput: UpdateUserInput;
 };
 
 export type Query = {
   __typename?: 'Query';
+  contract: ContractType;
+  demo: Array<HouseType>;
   house: HouseType;
   houses: Array<HouseType>;
   myHouse: Array<HouseType>;
   user: UserType;
   users: Array<UserType>;
+};
+
+
+export type QueryContractArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
@@ -145,16 +185,14 @@ export type UpdateHouseInput = {
   status: Scalars['String']['input'];
 };
 
+export type UpdatePasswordInput = {
+  currentpassword: Scalars['String']['input'];
+  newPassword: Scalars['String']['input'];
+};
+
 export type UpdateUserInput = {
-  accountType?: InputMaybe<Scalars['String']['input']>;
-  firstName?: InputMaybe<Scalars['String']['input']>;
-  gender?: InputMaybe<Scalars['String']['input']>;
-  id: Scalars['Int']['input'];
-  lastname?: InputMaybe<Scalars['String']['input']>;
-  middleName?: InputMaybe<Scalars['String']['input']>;
-  password?: InputMaybe<Scalars['String']['input']>;
-  phoneNumber?: InputMaybe<Scalars['String']['input']>;
-  username?: InputMaybe<Scalars['String']['input']>;
+  phoneNumber: Scalars['String']['input'];
+  username: Scalars['String']['input'];
 };
 
 export type UserType = {
@@ -194,6 +232,11 @@ export type GetAllHousesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetAllHousesQuery = { __typename?: 'Query', houses: Array<{ __typename?: 'HouseType', Description: string, District: string, Region: string, Ward: string, imgUrl: Array<string>, name: string, price: number, status: string, user: { __typename?: 'UserType', firstName: string, middleName: string, lastname: string, gender: string, phoneNumber: string, username: string, accountType: string } }> };
 
+export type GetAllHousesDemoQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllHousesDemoQuery = { __typename?: 'Query', demo: Array<{ __typename?: 'HouseType', Description: string, District: string, Region: string, Ward: string, imgUrl: Array<string>, name: string, price: number, status: string, user: { __typename?: 'UserType', firstName: string, middleName: string, lastname: string, gender: string, phoneNumber: string, username: string, accountType: string } }> };
+
 export type GetMyHousesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -205,6 +248,13 @@ export type UpdateHouseInputMutationVariables = Exact<{
 
 
 export type UpdateHouseInputMutation = { __typename?: 'Mutation', updateHouse: string };
+
+export type UpdateUserInputMutationVariables = Exact<{
+  input: UpdateUserInput;
+}>;
+
+
+export type UpdateUserInputMutation = { __typename?: 'Mutation', updateUser: string };
 
 export type GetUserbyUsernameQueryVariables = Exact<{
   username: Scalars['String']['input'];
@@ -338,6 +388,43 @@ export const useGetAllHousesQuery = <
       fetcher<GetAllHousesQuery, GetAllHousesQueryVariables>(client, GetAllHousesDocument, variables, headers),
       options
     );
+export const GetAllHousesDemoDocument = `
+    query getAllHousesDemo {
+  demo {
+    Description
+    District
+    Region
+    Ward
+    imgUrl
+    name
+    price
+    status
+    user {
+      firstName
+      middleName
+      lastname
+      gender
+      phoneNumber
+      username
+      accountType
+    }
+  }
+}
+    `;
+export const useGetAllHousesDemoQuery = <
+      TData = GetAllHousesDemoQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables?: GetAllHousesDemoQueryVariables,
+      options?: UseQueryOptions<GetAllHousesDemoQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<GetAllHousesDemoQuery, TError, TData>(
+      variables === undefined ? ['getAllHousesDemo'] : ['getAllHousesDemo', variables],
+      fetcher<GetAllHousesDemoQuery, GetAllHousesDemoQueryVariables>(client, GetAllHousesDemoDocument, variables, headers),
+      options
+    );
 export const GetMyHousesDocument = `
     query getMyHouses {
   myHouse {
@@ -392,6 +479,24 @@ export const useUpdateHouseInputMutation = <
     useMutation<UpdateHouseInputMutation, TError, UpdateHouseInputMutationVariables, TContext>(
       ['UpdateHouseInput'],
       (variables?: UpdateHouseInputMutationVariables) => fetcher<UpdateHouseInputMutation, UpdateHouseInputMutationVariables>(client, UpdateHouseInputDocument, variables, headers)(),
+      options
+    );
+export const UpdateUserInputDocument = `
+    mutation UpdateUserInput($input: UpdateUserInput!) {
+  updateUser(updateUserInput: $input)
+}
+    `;
+export const useUpdateUserInputMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient,
+      options?: UseMutationOptions<UpdateUserInputMutation, TError, UpdateUserInputMutationVariables, TContext>,
+      headers?: RequestInit['headers']
+    ) =>
+    useMutation<UpdateUserInputMutation, TError, UpdateUserInputMutationVariables, TContext>(
+      ['UpdateUserInput'],
+      (variables?: UpdateUserInputMutationVariables) => fetcher<UpdateUserInputMutation, UpdateUserInputMutationVariables>(client, UpdateUserInputDocument, variables, headers)(),
       options
     );
 export const GetUserbyUsernameDocument = `

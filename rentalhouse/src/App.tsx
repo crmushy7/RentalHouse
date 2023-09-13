@@ -11,7 +11,6 @@ import FrontPage from "./screens/FirstPage/front-page";
 import RegisterPage from "./screens/Authentication/registration/register";
 import Users from "./screens/mainscreens/PaidHouses";
 import EditHouse from "./screens/Owner/EditHouse";
-
 const App: FC = () => {
   return (
     <Routes>

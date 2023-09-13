@@ -5,7 +5,6 @@ import { useLocation } from 'react-router';
 const CustomEditCard = (props) => {
   const data =props;
   const {state}=useLocation();
-  console.log(data)
   return (
     <div className='flex h-32'>
       {" "}

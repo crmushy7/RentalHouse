@@ -51,15 +51,24 @@ import { getUserAccessToken } from "../../utils/localStorageUtils";
 import graphqlRequestClient from "../../lib/clients/GraphqlRequestClients";
 import { GetMyHousesQuery, useGetMyHousesQuery } from "../../generated/graphql";
 import CustomcardMyhouses from "./components/CustomcardMyhouses";
+import { Loader } from "@mantine/core";
+import Searchbar from "../mainscreens/Searchbar";
+import NewHouse from "./NewHouse";
 
 const myHouse: FC = () => {
+  const [showBookhouse, setShowBookhouse] = useState(false);
+  const [housediv, setHousediv] = useState(false);
+  const [initialError, setInitialError] = useState("No Error");
   const [accessToken, setAccessToken] = useState<string | null>(
     getUserAccessToken()
   );
   const [shouldFetchData, setShouldFetchData] = useState(false);
+  const [filteredData, setFiltereddata] = useState<
+    GetMyHousesQuery["myHouse"][0][]
+  >([]);
+  const [searchLength, setSearchLength] = useState<number>(0);
 
   useEffect(() => {
-    console.log(accessToken);
     if (accessToken) {
       setShouldFetchData(true);
     }
@@ -84,33 +93,86 @@ const myHouse: FC = () => {
     return <p>Please log in to view your houses.</p>;
   }
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) {
-    const errorMessage =
-      error.response &&
-      error.response.errors &&
-      error.response.errors.length > 0
-        ? error.response.errors[0].message.message
-        : "An error occurred";
-    return <p>{errorMessage}</p>;
-  }
+   if (isLoading)
+     return (
+       <span className="flex w-full h-full justify-center items-center flex-col">
+         <Loader />
+         <p>Loading...</p>
+         <p className="text-sm italic">Please wait</p>
+       </span>
+     );
+   if (error) {
+     const errorMessage = error.response.errors[0].message;
+     setInitialError(errorMessage);
+   }
 
-  if (data) {
-    console.log(data);
-  }
+  const handleOnSearch = (value: string) => {
+    setSearchLength(value.length);
+    if (data) {
+      const filtered: GetMyHousesQuery["myHouse"][0][] = data.myHouse.filter(
+        (house: GetMyHousesQuery["myHouse"][0]) =>
+          house.name.toLocaleLowerCase().includes(value.toLocaleLowerCase()) ||
+          house.Region.toLocaleLowerCase().includes(
+            value.toLocaleLowerCase()
+          ) ||
+          house.District.toLocaleLowerCase().includes(value.toLocaleLowerCase())
+      );
+      setFiltereddata(filtered);
+    } else {
+      setFiltereddata([]);
+    }
+  };
+  const addHouse = () => {
+    setShowBookhouse(true);
+    setShowBookhouse(true);
+  };
+  const handleCancelBookhouse = () => {
+    setShowBookhouse(false); // Close the Bookhouse component
+  };
 
   return (
     <div>
-      <h1>My Houses</h1>
-      <div className="h-5/6 w-auto  grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6  gap-3">
-        {data?.myHouse.map((myhouse, index) => (
-          <div key={index}>
-            {/* <img src={`${myhouse.imgUrl[1]}`} alt={myhouse.name} /> */}
-
-            <CustomcardMyhouses data={myhouse} />
+      <h1 className="flex w-full justify-center items-center text-blue-600">
+        MY HOUSES
+      </h1>
+      <div className="flex flex-col">
+        <div className="flex justify-between items-end w-full">
+          <div className="flex h-9 text-center  justify-center items-center mr-2">
+            <button
+              className="flex border border-slate-200 text-center rounded-md p-2 pi pi-plus bg-blue-500  "
+              onClick={addHouse}
+            >
+              Add House
+            </button>
           </div>
-        ))}
+
+          <Searchbar onChange={handleOnSearch} />
+        </div>
+        {initialError !== "No Error" ? (
+          <div>{initialError}</div>
+        ) : (
+          <div className="h-5/6 w-full  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4  gap-3">
+            {filteredData.length === 0 && searchLength !== 0 ? (
+              <div>no data</div>
+            ) : searchLength === 0 ? (
+              data?.myHouse.map((item, index) => (
+                <CustomcardMyhouses key={index} data={item} />
+              ))
+            ) : (
+              filteredData.map((item, index) => (
+                <CustomcardMyhouses key={index} data={item} />
+              ))
+            )}
+          </div>
+        )}
       </div>
+      {showBookhouse && (
+        <NewHouse
+          onClose={handleCancelBookhouse}
+          // state={state}
+          // userdata={userdata}
+        />
+      )}
     </div>
   );
 };

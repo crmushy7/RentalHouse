@@ -1,0 +1,21 @@
+query getAllHousesDemo {
+  demo {
+    Description
+    District
+    Region
+    Ward
+    imgUrl
+    name
+    price
+    status
+    user {
+      firstName
+      middleName
+      lastname
+      gender
+      phoneNumber
+      username
+      accountType
+    }
+  }
+}

@@ -15,6 +15,11 @@ import { useQueryClient } from "@tanstack/react-query";
 import { GraphQLError } from "graphql";
 import { Select } from "@chakra-ui/react";
 import { notifications } from "@mantine/notifications";
+import Passwordfield from "../component/Password";
+import { Password } from "primereact/password";
+import TemplateDemo from "../component/Password";
+import PasswordInput from "../component/Password";
+import { InputText } from "primereact/inputtext";
 
 const RegisterPage: FC = () => {
   const navigate = useNavigate();
@@ -26,27 +31,23 @@ const RegisterPage: FC = () => {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
+  const [value, setValue] = useState<string>("");
   const [accountType, setAccountType] = useState("Account type");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [graphQLError, setGraphQLError] = useState<string | null>(null);
   const genderOptions = ["Male", "Female", "Non-binary", "Other"];
   const Acctypeoptions = ["Tenant", "Owner"];
   const { mutate } = useCreateUserInputMutation(graphqlRequestClient, {
-    onSuccess: (data: CreateUserInputMutation) => {
+    onSuccess: () => {
       queryClient.invalidateQueries(["createUserInput"]);
       return success();
     },
-    onError: (error: GraphQLError) => {
-      const errorMessage = Array.isArray(
-        error.response.errors[0].extensions.originalError.message
-      )
-        ? error.response.errors[0].extensions.originalError.message.join(", ")
-        : error.response.errors[0].extensions.originalError.message;
-      setGraphQLError(errorMessage);
+    onError: () => {
+      const errorMessage = 'Unauthorized Access!!'
       errorDisplay(errorMessage);
     },
   });
-  const errorDisplay = (errorMessage) => {
+  const errorDisplay = (errorMessage :string) => {
     notifications.show({
       title: "Oops!!",
       message: `${errorMessage}`,
@@ -69,9 +70,7 @@ const RegisterPage: FC = () => {
     });
   };
   const success = () => {
-    
-      navigate("/auth");
-    
+    navigate("/auth");
   };
 
   const handleRegister = async () => {
@@ -83,22 +82,28 @@ const RegisterPage: FC = () => {
       email.length === 0 ||
       password.length === 0
     ) {
-      errorDisplay("All fields required!")
+      errorDisplay("All fields required!");
     } else if (selectedGender === "Select Gender") {
       errorDisplay("Choose Gender!");
     } else if (accountType === "Account type") {
       errorDisplay("Account Type required!");
     } else if (password !== confirmPassword) {
       errorDisplay("Password does not match!");
+    }else if(phoneNumber.length !== 9){
+      errorDisplay("Incorrect phone number length!! Country code automatically added");
     } else {
+      const newNumber="+255"+phoneNumber
+      const number = newNumber.trim().replace(/\s+/g, " ");
+      console.log('new number',number)
       await mutate({
+
         input: {
           username: email,
           firstName: firstName,
           middleName: middleName,
           lastname: lastname,
           gender: selectedGender,
-          phoneNumber: phoneNumber,
+          phoneNumber: number,
           accountType: accountType,
           password: password,
         },
@@ -109,15 +114,16 @@ const RegisterPage: FC = () => {
   const handleLogin = () => {
     navigate("/auth");
   };
-  const handleGenderChange = (event) => {
+  const handleGenderChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedGender(event.target.value);
   };
-  const handleAcctype = (event) => {
+  const handleAcctype = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setAccountType(event.target.value);
   };
 
   return (
     <div className="bg-slate-200 w-full h-screen items-center justify-center flex">
+      
       <div className="flex flex-col w-full h-5/6 bg-white mx-10 rounded-lg sm:flex-row sm:flex sm:w-full sm:h-4/6 sm:bg-white md:w-4/6 lg:w-4/6 xl:w-6/12 2xl:w-5/12">
         <div className="rounded-t-lg  w-full h-1/4 flex flex-col justify-center items-center gap-2 sm:w-1/2 sm:h-full sm:flex sm:flex-col sm:gap-2 sm:justify-center sm:items-center sm:rounded-lg  2xl:h-full">
           <p className="text-stone-700 font-semibold text-2xl">Welcome</p>
@@ -139,21 +145,20 @@ const RegisterPage: FC = () => {
         <BackgroundImage
           src={`${"https://us.123rf.com/450wm/altitudevisual/altitudevisual2303/altitudevisual230302636/200859262-house-with-exterior-lighting-and-security-system-providing-safety-and-comfort-created-with.jpg?ver=6"}`}
           radius="md"
-          className="w-full h-3/4 gap-5 rounded-b-lg flex flex-col justify-center items-center sm:w-1/2 sm:h-full sm:Right-to-left sm:flex sm:justify-center sm:items-center 2xl:h-full"
+          className="overflow-auto w-full h-full gap-5 rounded-b-lg flex flex-col justify-center items-center sm:w-1/2 sm:h-full sm:Right-to-left sm:flex sm:justify-center sm:items-center 2xl:h-full"
         >
-          <img
-            src="https://cdn-icons-png.flaticon.com/128/3005/3005358.png"
-            alt="logo"
-            style={{ width: "50px", height: "50px" }}
-          />
-          <div className="w-5/6 flex flex-col gap-3 sm:w-5/6 md:5/6 lg:w-5/6 xl:w-5/6 2xl:w-5/6">
+          <div className="flex h-1/6 pt-2 ">
+           
+          </div>
+
+          <div className="w-5/6 pb-3 flex flex-col gap-3 sm:w-5/6 md:5/6 lg:w-5/6 xl:w-5/6 2xl:w-5/6 h-full">
             <CustomInputField
               type={"text"}
               backgroundColor={colors.white}
               border={"none"}
               borderRadius={6}
               fontSize={"14px"}
-              padding={6}
+              padding={10}
               width={"100%"}
               placeholder={"First Name"}
               onChange={setFirstName}
@@ -164,7 +169,7 @@ const RegisterPage: FC = () => {
               border={"none"}
               borderRadius={6}
               fontSize={"14px"}
-              padding={6}
+              padding={10}
               width={"100%"}
               placeholder={"Middle Name"}
               onChange={setMiddleNAme}
@@ -175,7 +180,7 @@ const RegisterPage: FC = () => {
               border={"none"}
               borderRadius={6}
               fontSize={"14px"}
-              padding={6}
+              padding={10}
               width={"100%"}
               placeholder={"last Name"}
               onChange={setLastName}
@@ -186,45 +191,60 @@ const RegisterPage: FC = () => {
               border={"none"}
               borderRadius={6}
               fontSize={"14px"}
-              padding={6}
+              padding={10}
               width={"100%"}
               placeholder={"Email"}
               onChange={setEmail}
             />
-            <CustomInputField
+            <div className="p-inputgroup flex w-full rounded-md items-center bg-slate-200">
+              <span className="p-inputgroup-addon pr-1">+255</span>
+              <InputText
+                placeholder="phone number"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                className="flex w-full h-full rounded-r-md p-2"
+                type="number"
+              />
+            </div>
+            {/* <CustomInputField
               type={"text"}
               backgroundColor={colors.white}
               border={"none"}
               borderRadius={6}
               fontSize={"14px"}
-              padding={6}
+              padding={10}
               width={"100%"}
               placeholder={"Phone number"}
               onChange={setPhoneNumber}
-            />
+            /> */}
 
-            <CustomInputField
-              type={"password"}
-              backgroundColor={colors.white}
-              border={"none"}
-              borderRadius={6}
-              fontSize={"14px"}
-              padding={6}
-              width={"100%"}
-              placeholder={"Password"}
-              onChange={setPassword}
-            />
-            <CustomInputField
-              type={"password"}
-              backgroundColor={colors.white}
-              border={"none"}
-              borderRadius={6}
-              fontSize={"14px"}
-              padding={6}
-              width={"100%"}
-              placeholder={"Confirm password"}
-              onChange={setConfirmPassword}
-            />
+            <span className="flex w-full bg-white rounded-lg">
+              <PasswordInput
+                type={"password"}
+                backgroundColor={""}
+                border={""}
+                borderRadius={0}
+                fontSize={""}
+                padding={0}
+                width={""}
+                placeholder={"input strong password"}
+                onChange={setPassword}
+              />
+            </span>
+
+            <span className="flex w-full bg-white rounded-lg">
+              <PasswordInput
+                type={"password"}
+                backgroundColor={""}
+                border={""}
+                borderRadius={0}
+                fontSize={""}
+                padding={0}
+                width={""}
+                placeholder={"confirm password"}
+                onChange={setConfirmPassword}
+              />
+            </span>
             <div className="flex border border-black">
               <Select
                 borderColor="tomato"

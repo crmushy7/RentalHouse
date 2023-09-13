@@ -1,8 +1,8 @@
 import { Textarea } from "@mantine/core";
+import { Select } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import {
-  CreateUserInputMutation,
   UpdateHouseInputMutation,
   useUpdateHouseInputMutation,
 } from "../../../generated/graphql";
@@ -21,16 +21,20 @@ const CustomEditHouse = () => {
   const [description, setDescription] = useState(state?.data.Description);
   const [bordered, setBordered] = useState("");
   const [border, setBorder] = useState(2);
-
+  const [graphqlError, setGraphqlError] = useState<string | null>("");
+  const navigate =useNavigate();
   const [accessToken, setAccessToken] = useState<string | null>(
     getUserAccessToken()
+
   );
+  const [actualStatus, setActualStatus] = useState("House Status");
+   const statusOptions = ["Available", "Booked"];
   const [shouldFetchData, setShouldFetchData] = useState(false);
 
   useEffect(() => {
-    console.log(accessToken);
     if (accessToken) {
       setShouldFetchData(true);
+      setAccessToken(accessToken)
     }
   }, [accessToken]);
 
@@ -49,11 +53,11 @@ const CustomEditHouse = () => {
         )
           ? error.response.errors[0].extensions.originalError.message.join(", ")
           : error.response.errors[0].extensions.originalError.message;
-        setGraphQLError(errorMessage);
+        setGraphqlError(errorMessage);
       },
     }
   );
-  const errorDisplay = (errorMessage) => {
+  const errorDisplay = (errorMessage:string) => {
     notifications.show({
       title: "Oops!!",
       message: `${errorMessage}`,
@@ -75,7 +79,7 @@ const CustomEditHouse = () => {
       autoClose: 5000,
     });
   };
-   const success = (feedback) => {
+   const success = (feedback:string) => {
      notifications.show({
        title: "",
        message: `${feedback}`,
@@ -107,24 +111,28 @@ const CustomEditHouse = () => {
 
   const handleToggleEdit = () => {
     if (isEditable) {
+      if(actualStatus==='House Status'){
+        errorDisplay("Update House status!")
+      }else{
       mutate({
         input: {
           Description: description,
           _id: state?.data._id,
           name: name,
           price: Number(price),
-          status: "available",
+          status: actualStatus,
         },
       });
-      setIsEditable(!isEditable);
+      setIsEditable(!isEditable);}
     } else {
       setBordered("black");
       setBorder(4);
       setIsEditable(!isEditable);
     }
   };
-
-  console.log("my state", state);
+  const handleBack=()=>{
+    navigate('/home')
+  }
 
   return (
     <div className="flex  w-screen overflow-auto h-full justify-center flex-col">
@@ -167,6 +175,24 @@ const CustomEditHouse = () => {
           className={`border-${border} border-${bordered} max-h-12 w-5/6 rounded-lg pl-4 h-16 `}
         />
       </span>
+      <span
+        className={`flex overflow-auto  w-5/6 flex-col border  border-black rounded-md`}
+      >
+        <Select
+          borderColor="tomato"
+          color="black"
+          className="text-black bg-white "
+          placeholder=" House status"
+          value={actualStatus}
+          onChange={(event) => setActualStatus(event.target.value)}
+        >
+          {statusOptions.map((setstatus, index) => (
+            <option key={index} value={setstatus}>
+              {setstatus}
+            </option>
+          ))}
+        </Select>
+      </span>
       <span className="flex flex-col  overflow-auto  w-full pl-4  min-h-min h-auto max-h-28 ">
         <span className="mt-4">Description</span>
         <Textarea
@@ -179,10 +205,10 @@ const CustomEditHouse = () => {
         />
       </span>
       <div className="flex justify-evenly mt-4">
-        <button className="border p-3 rounded-xl bg-slate-400 w-28">
-          Like
-        </button>
-        <button className="border p-3 rounded-xl bg-slate-400 w-28">
+        <button
+          className="border p-3 rounded-xl bg-slate-400 w-28"
+          onClick={handleBack}
+        >
           Back
         </button>{" "}
         <button

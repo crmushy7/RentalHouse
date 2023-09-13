@@ -16,13 +16,12 @@ import { getUserAccessToken } from "../../utils/localStorageUtils";
 import { notifications } from "@mantine/notifications";
 
 const AddHouse: FC = () => {
-  const [data] = UseAddHouse();
   const [accessToken, setAccessToken] = useState<string | null>(
     getUserAccessToken()
   );
   const queryClient = useQueryClient();
   const [graphQLError, setGraphQLError] = useState<string | null>(null);
-  const [imgUrl, setImgurl] = useState<Array>([]);
+  const [imgUrl, setImgurl] = useState<Array<string>>([]);
   const [value, setValue] = useState<string>("");
   const [houseRegion, setHouseregion] = useState<string>("");
   const [houseName, setHousename] = useState<string>("");
@@ -34,8 +33,8 @@ const AddHouse: FC = () => {
     graphqlRequestClient.setHeaders({ Authorization: `Bearer ${accessToken}` }),
     {
       onSuccess: (data: CreateHouseInputMutation) => {
-        queryClient.invalidateQueries(["createUserInput"]);
-        return success();
+        queryClient.invalidateQueries(["getMyHouses"]);
+        return success("Success!");
       },
       onError: (error: GraphQLError) => {
         const errorMessage = Array.isArray(
@@ -71,24 +70,44 @@ const AddHouse: FC = () => {
       autoClose: 1000,
     });
     setTimeout(() => {
-      setHousename("")
-      setHouseregion("")
-      setHouseDistrict("")
-      setHouseWard("")
-      setPrice("")
-      setDescription("")
+    
     }, 1000);
   };
+  function isValidImageUrl(url: string): Promise<boolean> {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.src = url;
 
-  const addImage = () => {
-    if (value.length != 0) {
-      setImgurl([...imgUrl, value]);
+      img.onload = () => {
+        resolve(true); 
+      };
 
-      setValue("");
+      img.onerror = () => {
+        resolve(false); 
+      };
+    });
+  }
+  const addImage = async () => {
+    if (value.length !== 0) {
+      try {
+        const isValid = await isValidImageUrl(value);
+
+        if (isValid) {
+          setImgurl([...imgUrl, value]);
+          success('Image added!')
+          setValue("");
+        } else {
+         errorDisplay("Invalid URL. Please provide a valid image URL.");
+        }
+      } catch (error) {
+        console.error("Error checking URL validity:", error);
+        errorDisplay("Error checking URL validity:", error);
+      }
     } else {
-      window.alert("url cannot be empty");
+      errorDisplay("URL cannot be empty");
     }
   };
+
   const errorDisplay = (errorMessage) => {
     notifications.show({
       title: "Oops!!",
@@ -123,8 +142,8 @@ const AddHouse: FC = () => {
       errorDisplay("All fields required!");
     } else if (imgUrl.length === 0) {
       errorDisplay("Add images!");
-    } else if (imgUrl.length < 5) {
-      errorDisplay(`Add ${5 - imgUrl.length} more images`);
+    } else if (imgUrl.length < 8) {
+      errorDisplay(`Add ${8 - imgUrl.length} more images`);
     } else {
       await mutate({
         input: {
@@ -138,6 +157,12 @@ const AddHouse: FC = () => {
           name: houseName,
         },
       });
+       setHousename("");
+       setHouseregion("");
+       setHouseDistrict("");
+       setHouseWard("");
+       setPrice("");
+       setDescription("");
     }
   };
   return (
@@ -146,7 +171,7 @@ const AddHouse: FC = () => {
         className={`flex flex-col h-full  w-full overflow-auto md:items-center md:justify-center  `}
         style={{}}
       >
-        <div className="flex flex-row justify-center items-center h-auto w-auto   bg-white rounded-full ">
+        <div className="flex flex-row justify-center items-center h-auto w-auto    rounded-full ">
           <img
             className="flex rounded-full shadow-xl "
             src={Rental}
@@ -313,15 +338,7 @@ const AddHouse: FC = () => {
               />
             </div>
           </div>
-          {/* {data?.map((item, index) => {
-            return (
-              <Custominput
-                labeled={item.labeled}
-                inputType={item.inputType}
-                placeholder={item.placeholder}
-                key={index} value={""} onchange={ }              />
-            );
-          })} */}
+         
           <div className="flex w-full justify-evenly ">
             <div className="flex w-2/3  flex-col">
               <span

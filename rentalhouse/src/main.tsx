@@ -10,6 +10,8 @@ import { ChakraProvider } from "@chakra-ui/react";
 
 import { Notifications } from "@mantine/notifications";
 import { PrimeReactProvider } from "primereact/api";
+import { ToastContainer } from "react-toastify";
+import { ModalsProvider } from "@mantine/modals";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,11 +26,14 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <MantineProvider withGlobalStyles withNormalizeCSS>
         <QueryClientProvider client={queryClient}>
-          <ReactQueryDevtools initialIsOpen={false} />
+          {/* <ReactQueryDevtools initialIsOpen={false} /> */}
           <ChakraProvider>
             <PrimeReactProvider>
               <Notifications position="top-center" />
-              <App />
+              <ModalsProvider>
+                <App />
+              </ModalsProvider>
+              <ToastContainer />
             </PrimeReactProvider>
           </ChakraProvider>
         </QueryClientProvider>

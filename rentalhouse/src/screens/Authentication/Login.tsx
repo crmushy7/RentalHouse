@@ -72,6 +72,7 @@ import { saveUserData } from "../../utils/localStorageUtils";
 import colors from "../../lib/color/colors";
 import CustomInputField from "./component/custom-input-field";
 import CustomButton from "./component/custom-buttom";
+import PasswordInput from "./component/Password";
 
 const Login: FC = () => {
   const navigate = useNavigate();
@@ -85,7 +86,6 @@ const Login: FC = () => {
     onSuccess: (data: LoginUserInputMutation) => {
       queryClient.invalidateQueries(["LoginUserInput"]);
       saveUserData(data);
-      console.log(data.login.user.accountType);
       const accounttype = data.login.user.accountType;
       return success(accounttype);
     },
@@ -97,7 +97,6 @@ const Login: FC = () => {
       //   : error.response.errors[0].message.message;
       const errorMessage = error.response.errors[0].message;
       setGraphQLError(errorMessage);
-      console.log(errorMessage)
       errorDisplay(errorMessage);
     },
   });
@@ -127,6 +126,9 @@ const Login: FC = () => {
   };
 
   const handleLogin = () => {
+    const emailAll=email.toLocaleLowerCase().trim();
+    setEmail(emailAll)
+    setPassword(password.trim())
     mutate({
       input: {
         username: email,
@@ -192,7 +194,7 @@ const Login: FC = () => {
         <BackgroundImage
           src={`${"https://us.123rf.com/450wm/altitudevisual/altitudevisual2303/altitudevisual230302636/200859262-house-with-exterior-lighting-and-security-system-providing-safety-and-comfort-created-with.jpg?ver=6"}`}
           radius="md"
-          className="w-full h-1/2 gap-5 rounded-b-lg flex flex-col justify-center items-center sm:w-1/2 sm:h-full sm:Right-to-left sm:flex sm:justify-center sm:items-center 2xl:h-full"
+          className="w-full overflow-auto h-1/2 gap-5 rounded-b-lg flex flex-col justify-center items-center sm:w-1/2 sm:h-full sm:Right-to-left sm:flex sm:justify-center sm:items-center 2xl:h-full"
         >
           <img
             src="https://cdn-icons-png.flaticon.com/128/950/950586.png"
@@ -206,22 +208,24 @@ const Login: FC = () => {
               border={"none"}
               borderRadius={6}
               fontSize={"14px"}
-              padding={6}
+              padding={12}
               width={"100%"}
               placeholder={"Email"}
               onChange={setEmail}
             />
-            <CustomInputField
-              type={"password"}
-              backgroundColor={colors.white}
-              border={"none"}
-              borderRadius={6}
-              fontSize={"14px"}
-              padding={6}
-              width={"100%"}
-              placeholder={"password"}
-              onChange={setPassword}
-            />
+            <span className="flex w-full bg-white rounded-lg">
+              <PasswordInput
+                type={"password"}
+                backgroundColor={""}
+                border={""}
+                borderRadius={0}
+                fontSize={""}
+                padding={0}
+                width={""}
+                placeholder={"input your password"}
+                onChange={setPassword}
+              />
+            </span>
             <div className="flex place-content-between w-full">
               <CustomButton
                 backgroundColor={colors.transparent}

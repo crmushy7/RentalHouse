@@ -3,7 +3,7 @@ import Avatered from "../../assets/images/Avatared.jpeg";
 
 const RightBar = () => {
   return (
-    <div className="w-48 h-screen  items-center flex flex-col">
+    <div className="w-48 h-screen  items-center flex flex-col overflow-auto">
       <span className="flex justify-around w-5/6">
         Your Balance<span>...</span>
       </span>

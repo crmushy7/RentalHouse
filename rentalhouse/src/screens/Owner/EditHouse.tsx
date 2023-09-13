@@ -8,7 +8,6 @@ import { useLocation } from 'react-router';
 
 const EditHouse = () => {
   const {state}=useLocation();
-  console.log(state);
   return (
     <div className="flex h-screen w-full justify-center items-center">
       <div className="flex flex-col rounded-lg   w-full h-5/6  md:h-5/6 p-5 sm:flex-col sm:flex sm:w-full sm:h-full sm:p-5 md:flex-row lg:flex-row 2xl:flex-row lg:h-5/6 2xl:h-5/6 border border-black">
@@ -16,7 +15,7 @@ const EditHouse = () => {
           <div className="flex w-full h-1/2 border flex-col">
             <BackgroundImage
               className="h-full w-full rounded-lg justify-between flex flex-col"
-              src={state?.data.imgUrl[1]}
+              src={state?.data.imgUrl[0]}
             >
               <span className="flex w-full justify-end items-end"></span>
             </BackgroundImage>

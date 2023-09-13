@@ -4,3 +4,10 @@
 ::-webkit-scrollbar {
   display: none;
 }
+.react-query-logo {
+  display: none;
+}
+.notification {
+  position: absolute;
+  z-index: 9999; /* Set a high Z-index value to ensure it's on top */
+}
